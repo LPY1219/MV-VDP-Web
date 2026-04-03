@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title> MV-VDP </title>
+
+  <link rel="icon" href="./static/images/MV-VPD_logo.png">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/leaderboard.css">
+  <link rel="stylesheet" href="./static/css/video-player.css">
+
+  <script type="text/javascript" src="static/js/sort-table.js" defer></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/explorer-index.js"></script>
+  <script src="./static/js/question_card.js"></script>
+
+  <script src="./static/js/leaderboard_testmini.js"></script>  
+  <script src="./data/results/output_folders.js" defer></script>
+  <script src="./data/results/model_scores.js" defer></script>
+
+  <script src="./visualizer/data/data_public.js" defer></script>
+
+  <style>
+    :root {
+      --page-bg-top: #f4f6ff;
+      --page-bg-bottom: #eef1fb;
+      --surface: rgba(255, 255, 255, 0.9);
+      --surface-soft: rgba(247, 248, 255, 0.88);
+      --surface-border: rgba(99, 112, 190, 0.14);
+      --text-primary: #273556;
+      --text-secondary: #5c6885;
+      --heading-primary: #202d52;
+      --showcase-accent: #5666d5;
+      --showcase-accent-soft: #a8b2ff;
+      --showcase-accent-alt: #9d65d4;
+      --showcase-shadow: 0 18px 40px rgba(45, 53, 116, 0.12);
+      --showcase-shadow-hover: 0 24px 54px rgba(45, 53, 116, 0.18);
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background: #ffffff;
+      color: var(--text-primary);
+    }
+    body,
+    .content,
+    .content p,
+    .content li {
+      color: var(--text-primary);
+    }
+    .section,
+    .hero,
+    .container {
+      background: transparent;
+    }
+    .title,
+    .subtitle,
+    .mathvista_other,
+    .title.is-3,
+    .title.is-4 {
+      color: var(--heading-primary);
+    }
+    .section .title.is-3,
+    .section .title.is-4,
+    .hero.is-light .title.mathvista_other,
+    .hero.is-light .mathvista_other {
+      font-family: 'Montserrat', 'Google Sans', 'Noto Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: #2f3d79;
+      text-shadow: 0 2px 12px rgba(92, 102, 176, 0.12);
+    }
+    .section .title.is-3:not(.publication-subtitle),
+    .section .title.is-4,
+    .hero.is-light .title.mathvista_other,
+    .hero.is-light .mathvista_other {
+      background: linear-gradient(135deg, #3147a5 0%, #7256b8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .content strong,
+    .best {
+      color: #3342a1;
+    }
+    em,
+    i,
+    .content em,
+    .content i,
+    [style*="font-style:italic"],
+    [style*="font-style: italic"] {
+      font-style: normal !important;
+    }
+    a:not(.button):not(.navbar-link):not(.navbar-item) {
+      color: #4f60cb;
+      transition: color 0.2s ease;
+    }
+    a:not(.button):not(.navbar-link):not(.navbar-item):hover {
+      color: #8658c4;
+    }
+    /* Uniform video aspect-ratio wrapper (572:376 ≈ 3:2) */
+    .video-uniform {
+      position: relative;
+      width: 100%;
+      padding-bottom: 65.73%; /* 376/572 × 100% */
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+      transform-origin: center center;
+    }
+    .video-uniform video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+    .video-uniform video.keep-left {
+      object-position: left center;
+    }
+    .video-uniform:hover {
+      transform: translateY(-3px) scale(1.018);
+      box-shadow: var(--showcase-shadow-hover);
+    }
+    .video-uniform:hover video {
+      transform: scale(1.02);
+    }
+    .no-sort {
+        cursor: default;
+        pointer-events: none;
+        background-image: none !important; /* Remove the sort arrow */
+    }
+
+    .title-bridgevla {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2em;
+      font-weight: 700;
+      background: linear-gradient(45deg, #2196F3, #4CAF50);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      letter-spacing: 2px;
+      margin-bottom: 0.5em;
+      position: relative;
+      display: inline-block;
+      text-align: center;
+      padding-bottom: 0.2em;
+    }
+
+    .title-bridgevla::after {
+      content: '';
+      position: absolute;
+      bottom: -22px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(45deg, #2196F3, #4CAF50);
+      border-radius: 2px;
+    }
+
+    .title-bridgevla img {
+      width: 1.5em;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+    }
+
+    /* ── Video Carousel ─────────────────────────────────────────── */
+    .video-carousel {
+      position: relative;
+      width: 100%;
+      padding-left: 72px;
+      padding-right: 72px;
+      box-sizing: border-box;
+    }
+    .carousel-slide  { display: none; width: 100%; }
+    .carousel-slide.active { display: block; animation: carouselFade 0.42s ease; }
+    .carousel-slide video,
+    .carousel-slide img  {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      transition: transform 0.35s ease, filter 0.35s ease;
+    }
+    .carousel-slide img {
+      background: rgba(255, 255, 255, 0.92);
+      object-fit: contain;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 54px;
+      height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--showcase-accent);
+      border: 1px solid rgba(99, 112, 190, 0.18);
+      cursor: pointer;
+      z-index: 10;
+      border-radius: 999px;
+      line-height: 1;
+      font-size: 26px;
+      font-weight: 700;
+      box-shadow: 0 14px 28px rgba(45, 53, 116, 0.16);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: transform 0.24s ease, box-shadow 0.24s ease, background 0.24s ease, color 0.24s ease;
+      animation: arrowFloat 2.8s ease-in-out infinite;
+    }
+    .carousel-btn::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border-radius: inherit;
+      background: linear-gradient(145deg, rgba(168, 178, 255, 0.28), rgba(157, 101, 212, 0.08));
+      z-index: -1;
+    }
+    .carousel-btn:hover {
+      background: rgba(255, 255, 255, 0.94);
+      color: #3f4ab0;
+      transform: translateY(-50%) scale(1.08);
+      box-shadow: 0 18px 36px rgba(45, 53, 116, 0.22);
+    }
+    .carousel-btn:active {
+      transform: translateY(-50%) scale(0.96);
+    }
+    .carousel-prev { left:  0; }
+    .carousel-next { right: 0; }
+    @media screen and (max-width: 768px) {
+      .video-carousel {
+        padding-left: 56px;
+        padding-right: 56px;
+      }
+      .carousel-btn {
+        width: 46px;
+        height: 46px;
+        font-size: 22px;
+      }
+    }
+    .carousel-dots { text-align: center; padding: 12px 0 4px; }
+    .carousel-dots .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(112, 146, 184, 0.34);
+      margin: 0 5px;
+      cursor: pointer;
+      transform: scale(1);
+      transition: background .24s ease, transform .24s ease, box-shadow .24s ease;
+    }
+    .carousel-dots .dot:hover {
+      transform: scale(1.18);
+      background: rgba(86, 102, 213, 0.44);
+    }
+    .carousel-dots .dot.active {
+      background: var(--showcase-accent);
+      transform: scale(1.2);
+      box-shadow: 0 0 0 6px rgba(86, 102, 213, 0.12);
+    }
+    .carousel-counter { text-align: center; font-size: 0.85em; color: #6d7692; margin-top: 2px; }
+    .showcase-view-labels {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 0.32rem;
+      align-items: center;
+      margin: 0 0 0.7rem;
+      padding: 0.18rem 0.08rem 0;
+    }
+    .showcase-view-labels .view-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 1.82rem;
+      padding: 0.28rem 0.12rem;
+      border-radius: 999px;
+      font-family: 'Montserrat', 'Google Sans', 'Noto Sans', sans-serif;
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #f8fbff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 24px rgba(43, 49, 109, 0.16);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform 0.24s ease, box-shadow 0.24s ease, filter 0.24s ease;
+    }
+    .showcase-view-labels .view-chip:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(43, 49, 109, 0.2);
+      filter: saturate(1.06);
+    }
+    .showcase-view-labels .view-chip.view-1 {
+      background: linear-gradient(135deg, rgba(66, 96, 215, 0.9), rgba(91, 128, 237, 0.86));
+    }
+    .showcase-view-labels .view-chip.view-2 {
+      background: linear-gradient(135deg, rgba(88, 105, 184, 0.9), rgba(128, 101, 205, 0.84));
+    }
+    .showcase-view-labels .view-chip.view-3 {
+      background: linear-gradient(135deg, rgba(116, 84, 192, 0.9), rgba(164, 95, 194, 0.84));
+    }
+    .showcase-view-labels .ghost-slot {
+      display: block;
+      min-height: 1.82rem;
+    }
+    #vc-btn-press .showcase-view-labels .view-chip,
+    #vc-door-open .showcase-view-labels .view-chip,
+    #vc-faucet-close .showcase-view-labels .view-chip {
+      min-height: 1.66rem;
+      padding: 0.2rem 1.5rem;
+      width: max-content;
+      justify-self: center;
+    }
+    #vc-btn-press .showcase-view-labels .ghost-slot,
+    #vc-door-open .showcase-view-labels .ghost-slot,
+    #vc-faucet-close .showcase-view-labels .ghost-slot {
+      min-height: 1.66rem;
+    }
+    #vc-cook .showcase-view-labels,
+    #vc-push-t .showcase-view-labels,
+    #vc-put-lion .showcase-view-labels {
+      width: 88.5%;
+      margin-left: auto;
+      margin-right: auto;
+      gap: 0.24rem;
+      padding-left: 0;
+      padding-right: 0;
+      transform: translateX(-6.5%);
+    }
+    #vc-cook .showcase-view-labels .view-chip,
+    #vc-push-t .showcase-view-labels .view-chip,
+    #vc-put-lion .showcase-view-labels .view-chip {
+      min-height: 1.82rem;
+      padding: 0.28rem 0.12rem;
+      font-size: 0.64rem;
+      letter-spacing: 0.03em;
+    }
+    @media screen and (max-width: 768px) {
+      .showcase-view-labels {
+        gap: 0.22rem;
+        margin-bottom: 0.58rem;
+      }
+      .showcase-view-labels .view-chip {
+        min-height: 1.72rem;
+        padding: 0.28rem 0.14rem;
+        font-size: 0.58rem;
+        letter-spacing: 0.02em;
+      }
+      #vc-btn-press .showcase-view-labels .view-chip,
+      #vc-door-open .showcase-view-labels .view-chip,
+      #vc-faucet-close .showcase-view-labels .view-chip {
+        min-height: 1.56rem;
+        padding: 0.18rem 1.5rem;
+      }
+      #vc-cook .showcase-view-labels,
+      #vc-push-t .showcase-view-labels,
+      #vc-put-lion .showcase-view-labels {
+        width: 92%;
+        transform: translateX(-2.2%);
+      }
+    }
+
+    .content .box,
+    .video-carousel .box,
+    .tldr-box,
+    #BibTeX pre {
+      border-radius: 16px;
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+      box-shadow: var(--showcase-shadow);
+      transform-origin: center center;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+    }
+    .content .box:hover,
+    .video-carousel .box:hover,
+    .tldr-box:hover,
+    #BibTeX pre:hover {
+      transform: translateY(-4px) scale(1.012);
+      box-shadow: var(--showcase-shadow-hover);
+    }
+    .content .box img,
+    .content .box video,
+    .video-carousel img,
+    .video-carousel video {
+      transition: transform 0.35s ease, filter 0.35s ease;
+      transform-origin: center center;
+    }
+    .content .box:hover img,
+    .content .box:hover video,
+    .video-carousel:hover img,
+    .video-carousel:hover video {
+      transform: scale(1.015);
+      filter: saturate(1.03);
+    }
+
+    .table-showcase {
+      padding: 1.25rem 1.35rem;
+      background: linear-gradient(180deg, rgba(245, 246, 255, 0.98), rgba(235, 239, 251, 0.94));
+      border: 1px solid rgba(95, 104, 184, 0.16);
+      box-shadow: 0 16px 34px rgba(46, 52, 112, 0.12);
+      overflow: hidden;
+    }
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 12px;
+    }
+    .paper-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+      color: #273556;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .paper-table thead th {
+      background: linear-gradient(180deg, rgba(81, 92, 170, 0.16), rgba(128, 88, 160, 0.09));
+      color: #2f376d;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      border-bottom: 1px solid rgba(95, 104, 184, 0.18);
+    }
+    .paper-table th,
+    .paper-table td {
+      padding: 0.9rem 0.85rem;
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 1px solid rgba(48, 57, 98, 0.08);
+      transition: background 0.24s ease, color 0.24s ease;
+    }
+    .paper-table th:first-child,
+    .paper-table td:first-child {
+      text-align: left;
+    }
+    .paper-table tbody tr:hover td {
+      background: rgba(108, 120, 204, 0.07);
+    }
+    .paper-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .paper-table .ours-row td {
+      background: linear-gradient(90deg, rgba(85, 97, 184, 0.14), rgba(176, 120, 210, 0.08));
+      font-weight: 700;
+      color: #2c3270;
+    }
+    .paper-table .best {
+      font-weight: 700;
+      color: #3b46a0;
+    }
+    .paper-table .table-group {
+      font-size: 1.05rem;
+    }
+    .paper-table .table-citation {
+      display: inline-block;
+      margin-left: 0.22rem;
+      color: #6d6fa0;
+      font-size: 0.9em;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .paper-table .avg-col {
+      font-weight: 700;
+      color: #303a78;
+      white-space: nowrap;
+    }
+    .paper-table .bool-yes {
+      font-size: 1.5rem;
+      line-height: 1;
+      font-weight: 700;
+      color: #3b46a0;
+    }
+    .paper-table .bool-no {
+      font-size: 1.2rem;
+      line-height: 1;
+      color: #8d92aa;
+      font-weight: 700;
+    }
+    .paper-table.compact th,
+    .paper-table.compact td {
+      padding-top: 0.8rem;
+      padding-bottom: 0.8rem;
+    }
+    .paper-table .row-label {
+      font-weight: 700;
+      color: #2c3567;
+    }
+    .top-spotlight .publication-links .button.is-dark {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      box-shadow: 0 14px 26px rgba(10, 14, 30, 0.18);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    }
+    .top-spotlight .publication-links .button.is-dark:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 18px 34px rgba(10, 14, 30, 0.24);
+    }
+    .top-spotlight .publication-links .button.is-dark .icon,
+    .top-spotlight .publication-links .button.is-dark span {
+      color: #ffffff !important;
+    }
+    .top-spotlight .publication-links .button.is-dark .ai-arxiv {
+      color: #ffffff !important;
+    }
+    .top-spotlight .publication-links .hf-icon {
+      display: inline-block;
+      font-size: 1.05rem;
+      line-height: 1;
+      transform: translateY(1px);
+    }
+
+    .top-spotlight {
+      position: relative;
+      overflow: visible;
+      background:
+        radial-gradient(circle at 14% 20%, rgba(92, 168, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 84% 18%, rgba(126, 109, 255, 0.16), transparent 25%),
+        radial-gradient(circle at 50% 84%, rgba(48, 120, 220, 0.16), transparent 33%),
+        linear-gradient(135deg, #17213f 0%, #1d2d58 30%, #29406f 60%, #3c4f85 100%);
+      border-bottom: 1px solid rgba(171, 191, 255, 0.12);
+      box-shadow: inset 0 -18px 40px rgba(255, 255, 255, 0.05);
+    }
+    .top-spotlight::before,
+    .top-spotlight::after {
+      content: '';
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      filter: blur(4px);
+    }
+    .top-spotlight::before {
+      width: 420px;
+      height: 420px;
+      top: -160px;
+      left: -90px;
+      background: radial-gradient(circle, rgba(104, 173, 255, 0.2) 0%, rgba(104, 173, 255, 0.05) 56%, transparent 74%);
+    }
+    .top-spotlight::after {
+      width: 360px;
+      height: 360px;
+      right: -80px;
+      top: 20px;
+      background: radial-gradient(circle, rgba(132, 123, 255, 0.16) 0%, rgba(132, 123, 255, 0.04) 58%, transparent 74%);
+    }
+    .top-spotlight > * {
+      position: relative;
+      z-index: 1;
+    }
+    .top-spotlight .navbar {
+      background: transparent;
+      box-shadow: none;
+      position: relative;
+      z-index: 30;
+    }
+    .top-spotlight .navbar-menu,
+    .top-spotlight .navbar-start {
+      background: transparent;
+      overflow: visible;
+    }
+    .top-spotlight .navbar-link,
+    .top-spotlight .navbar-item,
+    .top-spotlight .navbar-item a {
+      color: #eaf4ff;
+    }
+    .top-spotlight .navbar-link:hover,
+    .top-spotlight .navbar-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #9ed0ff;
+    }
+    .top-spotlight .navbar-dropdown {
+      position: absolute;
+      top: calc(100% - 4px);
+      left: 50%;
+      min-width: 220px;
+      padding: 0.45rem 0;
+      background: rgba(8, 19, 40, 0.88);
+      border: 1px solid rgba(126, 185, 255, 0.14);
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transform: translateX(-50%);
+      z-index: 1000;
+      border-top: none;
+      display: block;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    }
+    .top-spotlight .navbar-item.has-dropdown {
+      position: relative;
+      padding-bottom: 0.6rem;
+      overflow: visible;
+      z-index: 40;
+    }
+    .top-spotlight .navbar-item.has-dropdown .navbar-link {
+      position: relative;
+      z-index: 2;
+    }
+    .top-spotlight .navbar-item.has-dropdown::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: 18px;
+      pointer-events: none;
+    }
+    .top-spotlight .navbar-item.has-dropdown:hover .navbar-dropdown,
+    .top-spotlight .navbar-item.has-dropdown:focus-within .navbar-dropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .top-spotlight .navbar-dropdown .navbar-item {
+      color: #eef5ff;
+      padding: 0.72rem 1.1rem;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+    }
+    .top-spotlight .navbar-dropdown .navbar-item:hover,
+    .top-spotlight .navbar-dropdown .navbar-item:focus {
+      background: rgba(126, 185, 255, 0.14);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+    .top-spotlight .hero {
+      background: transparent;
+      padding-bottom: 1rem;
+    }
+    .top-spotlight .hero-body {
+      padding-top: 2.2rem;
+      padding-bottom: 2.8rem;
+    }
+    .top-spotlight .publication-title,
+    .top-spotlight .publication-subtitle,
+    .top-spotlight .publication-subtitle strong,
+    .top-spotlight .publication-authors,
+    .top-spotlight .publication-authors .author-block,
+    .top-spotlight .publication-authors .author-block a,
+    .top-spotlight .publication-venue,
+    .top-spotlight .bridgevla {
+      color: #ffffff !important;
+      text-shadow: 0 2px 10px rgba(12, 16, 30, 0.24);
+    }
+    .top-spotlight .publication-title,
+    .top-spotlight .bridgevla {
+      font-family: "Times New Roman", Times, serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .top-spotlight .publication-subtitle,
+    .top-spotlight .publication-subtitle strong {
+      font-family: "Times New Roman", Times, serif;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .top-spotlight .publication-authors {
+      font-family: "Times New Roman", Times, serif;
+      line-height: 1.95;
+    }
+    .top-spotlight .publication-authors .author-block {
+      font-family: "Times New Roman", Times, serif;
+      margin: 0 0.42rem 0.35rem;
+    }
+    .top-spotlight .hero-author-notes,
+    .top-spotlight .hero-author-affiliations,
+    .top-spotlight .hero-author-affiliations .author-block,
+    .top-spotlight .hero-author-notes .author-block {
+      font-family: "Times New Roman", Times, serif;
+    }
+    .top-spotlight .hero-author-list {
+      max-width: 980px;
+      margin: 1.1rem auto 0.55rem !important;
+    }
+    .top-spotlight .hero-author-list br {
+      display: block;
+      content: '';
+      margin-top: 0.5rem;
+    }
+    .top-spotlight .hero-author-notes {
+      margin: 1rem auto 0.35rem !important;
+      opacity: 0.96;
+    }
+    .top-spotlight .hero-author-affiliations {
+      margin: 0.55rem auto 0 !important;
+      opacity: 0.94;
+    }
+    .top-spotlight .publication-links {
+      margin-top: 1.4rem;
+    }
+    .tldr-box {
+      background: linear-gradient(135deg, rgba(241, 244, 255, 0.96), rgba(232, 237, 252, 0.94)) !important;
+      border-left: 5px solid #6474dc !important;
+      box-shadow: 0 16px 34px rgba(45, 53, 116, 0.12) !important;
+    }
+    .tldr-box .title,
+    .tldr-box .title.is-4 {
+      color: #263669 !important;
+    }
+    .tldr-box p {
+      color: #4f5d7a !important;
+    }
+    .hero.is-light.is-small {
+      background: linear-gradient(180deg, rgba(234, 238, 252, 0.72), rgba(238, 241, 252, 0.2));
+    }
+    #BibTeX pre {
+      background: linear-gradient(180deg, rgba(248, 249, 255, 0.98), rgba(238, 241, 252, 0.94));
+      border: 1px solid rgba(99, 112, 190, 0.16);
+    }
+    #BibTeX code {
+      color: #6f4fb2;
+    }
+    footer.footer {
+      background: linear-gradient(180deg, rgba(231, 236, 251, 0.76), rgba(222, 228, 247, 0.9));
+      color: var(--text-secondary);
+      border-top: 1px solid rgba(99, 112, 190, 0.1);
+    }
+
+    @keyframes carouselFade {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes arrowFloat {
+      0%, 100% {
+        box-shadow: 0 14px 28px rgba(18, 53, 99, 0.18);
+      }
+      50% {
+        box-shadow: 0 18px 36px rgba(18, 53, 99, 0.24);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .video-uniform,
+      .video-uniform video,
+      .carousel-slide.active,
+      .carousel-slide video,
+      .carousel-slide img,
+      .carousel-btn,
+      .carousel-dots .dot,
+      .content .box,
+      .video-carousel .box,
+      .tldr-box,
+      #BibTeX pre {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+
+</head>
+<body>
+
+  
+
+<div class="top-spotlight">
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <p style="font-size:18px; display: inline; margin-right: -2px; margin-top: 12px;">🔥</p>
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://gr-mg.github.io/">
+            <b>GR-MG</b> 
+          </a>
+          <a class="navbar-item" href="https://robovlms.github.io/">
+            <b>RoboVLMs</b> 
+          </a>
+          <a class="navbar-item" href="https://bridgevla.github.io/">
+            <b>BridgeVLA</b> 
+          </a>
+          <a class="navbar-item" href="https://bridgev2w.github.io/">
+            <b>BridgeV2W</b> 
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title is-bold">
+            <img src="static/images/Logo.webp" style="width:2.5em;vertical-align: middle" alt="Logo"/>
+            <span class="bridgevla" style="vertical-align: middle;text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)">MV-VDP</span>
+            </h1>
+          <h2 class="subtitle is-3 publication-subtitle ", style="width: 100%;margin-bottom: 20px;">
+            <strong>A 3D Spatio-Temporal-Aware Video Action Model</strong>
+          </h2>
+          
+          
+          <div class="is-size-5 publication-authors hero-author-list", style="width: 100%; margin: 15px auto;", >
+            <span class="author-block"><a href="https://scholar.google.com/citations?hl=en&view_op=list_works&gmla=AH8HC4z9I-syS1a3l9OZjgq0nne9BDGS7xw5BXPqjohqNMk6ajdo0ryufZLNPEW6kRLoFaNuXORQWok-y5kfHw&user=b8z2YcYAAAAJ" target="_blank" style="color: black;">Peiyan Li</a>,<sup>1</sup><sup>,</sup><sup>2</sup><sup>,</sup><sup>*</sup></span>
+            <span class="author-block"><a href="https://yixiang-chen.cn/" target="_blank" style="color: black;">Yixiang Chen</a>,<sup>1</sup><sup>,</sup><sup>2</sup><sup>,</sup><sup>*</sup></span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?view_op=list_works&hl=zh-TW&user=vzUBE0oAAAAJ" target="_blank" style="color: black;">Yuan Xu</a>,<sup>1</sup><sup>,</sup><sup>2</sup></span>
+            <span class="author-block"><a href="https://jiabingyang.cn/" target="_blank" style="color: black;">Jiabing Yang</a>,<sup>1</sup><sup>,</sup><sup>2</sup></span>
+            <span class="author-block"><a href="https://xiangnan-wu.github.io/" target="_blank" style="color: black;">Xiangnan Wu</a>,<sup>1</sup><sup>,</sup><sup>2</sup></span>
+            <br>
+            <span class="author-block"><a href="" target="_blank" style="color: black;">Jun Guo</a>,<sup>4</sup></span>
+            <span class="author-block"><a href="https://scholar.google.com.hk/citations?user=O33_c8nN_HQC&hl=zh-CN" target="_blank" style="color: black;">Nan Sun</a>,<sup>4</sup></span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=~Long_Qian3" target="_blank" style="color: black;">Long Qian</a>,<sup>5</sup></span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=laOWyTQAAAAJ&hl=zh-CN" target="_blank" style="color: black;">Xinghang Li</a>,<sup>4</sup></span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=CL-ZEdwAAAAJ&hl=zh-CN" target="_blank" style="color: black;">Xin Xiao</a>,<sup>6</sup></span>
+            <span class="author-block">Jing Liu,<sup>3</sup></span>
+            <span class="author-block">Nianfeng Liu,<sup>3</sup></span>
+            <br>
+            <span class="author-block"><a href="https://www.taokong.org/" target="_blank" style="color: black;">Tao Kong</a>,<sup>4</sup><sup>,</sup><sup>†</sup></span>
+            <span class="author-block"><a href="https://yanrockhuang.github.io/" target="_blank" style="color: black;">Yan Huang</a>,<sup>1</sup><sup>,</sup><sup>2</sup><sup>,</sup><sup>3</sup><sup>,</sup><sup>†</sup></span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?hl=zh-CN&user=8kzzUboAAAAJ&view_op=list_works&sortby=pubdate" target="_blank" style="color: black;">Liang Wang</a>,<sup>1</sup><sup>,</sup><sup>2</sup></span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?hl=en&user=W-FGd_UAAAAJ&view_op=list_works&sortby=pubdate" target="_blank" style="color: black;">Tieniu Tan</a>,<sup>1</sup><sup>,</sup><sup>2</sup><sup>,</sup><sup>7</sup></span>
+        </div>
+
+        <div class="is-size-5 publication-authors hero-author-notes", style=" margin: 10px auto;", >
+          <span class="author-block"><sup>*</sup>Equal Contribution,</span>
+          <span class="author-block"><sup>†</sup>Corresponding Author</span>
+        </div>
+
+          <div class="is-size-5 publication-authors hero-author-affiliations">
+            <span class="author-block"><sup>1</sup>New Laboratory of Pattern Recognition (NLPR), Institute of Automation, Chinese Academy of Sciences</span>
+            <br>
+            <span class="author-block"><sup>2</sup>School of Artificial Intelligence, University of Chinese Academy of Sciences</span>
+            <br>
+            <span class="author-block"><sup>3</sup>FiveAges</span>
+            <span class="author-block"><sup>4</sup>Tsinghua University</span>
+            <span class="author-block"><sup>5</sup>Xi'an Jiaotong University</span>
+            <br>
+            <span class="author-block"><sup>6</sup>Wuhan University</span>
+            <span class="author-block"><sup>7</sup>Nanjing University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="javascript:void(0)"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv" style="color: #B31B1B;"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="javascript:void(0)"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Coming Soon)</span>
+                  </a>
+              </span>
+              <span class="link-block">
+                <a href="javascript:void(0)"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <span class="hf-icon" aria-hidden="true">🤗</span>
+                  </span>
+                  <span>Hugging Face</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+
+<!-- TLDR Section -->
+<section class="section" style="padding-top: 1rem; padding-bottom: 1rem;">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="tldr-box" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
+                                    border-left: 5px solid #4a90e2; 
+                                    padding: 20px; 
+                                    border-radius: 8px; 
+                                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <h2 class="title is-4" style="color: #2c3e50; margin-bottom: 10px;">TL;DR:</h2>
+          <p class="is-size-5" style="color: #34495e; line-height: 1.6;">
+            We introduce a 3D spatio-temporal-aware video action model that jointly predicts multi-view RGB frames and heatmaps, bridging video prediction and action recognition in a data-efficient, robust, generalizable, and interpretable manner.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="margin-bottom: 2vh;">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          Robotic manipulation requires understanding both the 3D spatial structure of the environment and its temporal evolution, yet most existing policies overlook one or both.
+          They typically rely on 2D visual observations and backbones pretrained on static image&ndash;text pairs, resulting in high data requirements and limited understanding of environment dynamics.
+          To address this, we introduce MV-VDP, a multi-view video diffusion policy that jointly models the 3D spatio-temporal state of the environment.
+          The core idea is to simultaneously predict multi-view heatmap videos and RGB videos, which 1) align the representation format of video pretraining with action finetuning, and 2) specify not only the actions the robot should take, but also how the environment is expected to evolve in response to those actions.
+          Extensive experiments show that MV-VDP enables <strong>data-efficient, robust, generalizable, and interpretable</strong> manipulation.
+          With only ten demonstration trajectories and without additional pretraining, MV-VDP successfully performs complex real-world tasks, demonstrates strong robustness across a range of model hyperparameters, generalizes to out-of-distribution settings, and predicts realistic future videos.
+          Experiments on Meta-World and real-world robotic platforms demonstrate that MV-VDP consistently outperforms video-prediction&ndash;based, 3D-based, and vision&ndash;language&ndash;action models, establishing a new state of the art in data-efficient multi-task manipulation.
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+</div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <div class="box" style="margin-top: 0; margin-bottom: 1rem;">
+            <div class="content has-text-centered">
+              <img src="static/images/Overview.png" alt="grade-lv" width="100%" style="max-width: 1200px; height: auto;"/>
+              <p>Figure 1: Overview of MV-VDP</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+</section>
+
+<!-- METHOD SECTION -->
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+  <h1 class="title is-1 mathvista_other">
+    <span class="mathvista_other" style="vertical-align: middle">Method</span>
+  </h1>
+  </div>
+</section>
+            
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>As illustrated in Fig. 2, MV-VDP employs a unified framework for joint spatio-temporal modeling and action prediction. The overall framework can be decomposed into three main components: multi-view representation and projection, joint video and heatmap diffusion, and hierarchical action decoding.</p>
+
+          <h4 class="title is-5 mt-5 mb-3">Multi-View Representation and Projection</h4>
+          <p>
+            MV-VDP transforms input colored point clouds and robot end-effector poses into a format compatible with video foundation models. Specifically, it uses orthographic projection to generate multi-view RGB images from the point cloud and represents robot states as multi-view Gaussian heatmaps. This design implicitly encodes 3D spatial structure while aligning with the representation used in video pre-training.
+          </p>
+
+          <h4 class="title is-5 mt-5 mb-3">Joint Video and Heatmap Diffusion</h4>
+          <p>
+            The model leverages a 5B-parameter video foundation model (Wan2.2) augmented with view-attention modules to ensure multi-view consistency. It is trained to jointly predict future multi-view RGB video sequences and corresponding heatmap sequences. By modeling how the environment evolves as a consequence of actions, the model captures environmental dynamics and future end-effector trajectories within a shared latent space.
+          </p>
+
+          <h4 class="title is-5 mt-5 mb-3">Hierarchical Action Decoding</h4>
+          <p>
+            To recover executable actions, MV-VDP employs a two-stream decoding process. The predicted heatmap peaks are back-projected into 3D space using camera parameters to recover a continuous 3D end-effector trajectory. Simultaneously, a lightweight rotation and gripper predictor takes the denoised video latents and localized heatmap features as input to estimate the end-effector's rotation (Euler angles) and gripper states.
+          </p>
+
+          <div class="box" style="margin-top: 2rem; margin-bottom: 2rem;">
+            <div class="content has-text-centered">
+              <img src="static/images/Method.png" alt="grade-lv" width="100%" style="max-width: 1200px; height: auto;"/>
+              <p>Figure 2: Network architecture of MV-VDP</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+</section>
+
+<!-- Simulation-->
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 mathvista_other">Experiments</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content">
+          <h2 class="title is-3 has-text-centered">Meta-World Simulation</h2>
+          <p class="has-text-justified">
+            The simulation experiments focus on <strong>seven distinct Meta-World tasks</strong>, including Door-Open, Button-Press, and Faucet-Close, using only <strong>five demonstration trajectories per task</strong> to evaluate learning efficiency. MV-VDP achieves a <strong>state-of-the-art average success rate of 89.1%</strong>, significantly outperforming the next best video-prediction baseline, Track2Act (<strong>67.4%</strong>), and standard behavioral cloning methods which struggle under such limited data. These results demonstrate that aligning action fine-tuning with video foundation model pretraining effectively <strong>reduces the gap between perception and control</strong>.
+          </p>
+          <div class="box" style="margin-top: 1rem; margin-bottom: 1rem;">
+            <div class="content has-text-centered table-showcase">
+              <div class="table-scroll">
+                <table class="paper-table">
+                  <thead>
+                    <tr>
+                      <th rowspan="2">Method</th>
+                      <th colspan="7" class="table-group">Meta-World Tasks</th>
+                      <th rowspan="2" class="avg-col">Avg.<br>Succ. (%) ↑</th>
+                    </tr>
+                    <tr>
+                      <th>D-Open</th>
+                      <th>D-Close</th>
+                      <th>Btn</th>
+                      <th>Btn-Top</th>
+                      <th>Fct-Cls</th>
+                      <th>Fct-Open</th>
+                      <th>Handle</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>UniPi<span class="table-citation">(Du et al., 2023)</span></td>
+                      <td>0/25</td><td>9/25</td><td>3/25</td><td>0/25</td><td>1/25</td><td>3/25</td><td>4/25</td><td class="avg-col">11.40</td>
+                    </tr>
+                    <tr>
+                      <td>BC-Scratch<span class="table-citation">(Nair et al., 2022)</span></td>
+                      <td>6/25</td><td>9/25</td><td>9/25</td><td>3/25</td><td>5/25</td><td>5/25</td><td>9/25</td><td class="avg-col">26.20</td>
+                    </tr>
+                    <tr>
+                      <td>BC-R3M<span class="table-citation">(Nair et al., 2022)</span></td>
+                      <td>1/25</td><td>15/25</td><td>9/25</td><td>1/25</td><td>6/25</td><td>17/25</td><td>13/25</td><td class="avg-col">35.40</td>
+                    </tr>
+                    <tr>
+                      <td>DP<span class="table-citation">(Chi et al., 2025)</span></td>
+                      <td>12/25</td><td>12/25</td><td>10/25</td><td>5/25</td><td>6/25</td><td>15/25</td><td>6/25</td><td class="avg-col">37.70</td>
+                    </tr>
+                    <tr>
+                      <td>AVDC<span class="table-citation">(Ko et al., 2023)</span></td>
+                      <td>18/25</td><td>23/25</td><td>15/25</td><td>6/25</td><td>14/25</td><td>6/25</td><td>21/25</td><td class="avg-col">58.90</td>
+                    </tr>
+                    <tr>
+                      <td>DreamZero<span class="table-citation">(Ye et al., 2026)</span></td>
+                      <td>0/25</td><td>11/25</td><td>23/25</td><td>3/25</td><td class="best">20/25</td><td class="best">25/25</td><td class="best">25/25</td><td class="avg-col">61.10</td>
+                    </tr>
+                    <tr>
+                      <td>Track2Act<span class="table-citation">(Bharadhwaj et al., 2024b)</span></td>
+                      <td>22/25</td><td>19/25</td><td>14/25</td><td>10/25</td><td>12/25</td><td>22/25</td><td>19/25</td><td class="avg-col">67.40</td>
+                    </tr>
+                    <tr class="ours-row">
+                      <td>MV-VDP (Ours)</td>
+                      <td class="best">25/25</td><td class="best">25/25</td><td class="best">25/25</td><td class="best">24/25</td><td>8/25</td><td class="best">24/25</td><td class="best">25/25</td><td class="avg-col best">89.10</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Table 1: Success rates on seven Meta-World tasks under a low-data regime (5 demonstrations per task). Each entry reports the number of successful rollouts out of 25 trials. Our method (MV-VDP) achieves the highest average success rate and consistently outperforms prior video-prediction and behavior-cloning baselines.</p>
+            </div>
+          </div>
+
+          <!-- Meta-World Videos -->
+
+          <!-- button-press -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Button Press</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/button-press/videos/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/button-press/videos/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/button-press/videos/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- button-press-topdown -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Button Press Topdown</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/button-press-topdown/videos/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/button-press-topdown/videos/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/button-press-topdown/videos/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- door-close -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Door Close</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/door-close/videos/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/door-close/videos/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/door-close/videos/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- door-open -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Door Open</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/door-open/videos/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/door-open/videos/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/door-open/videos/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- faucet-close -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Faucet Close</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/faucet-close/videos/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/faucet-close/videos/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/faucet-close/videos/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- faucet-open -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Faucet Open</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/faucet-open/videos/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/faucet-open/videos/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/faucet-open/videos/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- handle-press -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Handle Press</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/handle-press/videos/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/handle-press/videos/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <video width="100%" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Metaworld/handle-press/videos/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered">Episode 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real-World Base Tasks Section -->
+          <h2 class="title is-3 has-text-centered">Real-World Base Tasks</h2>
+          <p class="has-text-justified">
+            The real-world evaluation involves a <strong>Franka Research 3</strong> robot performing three foundational tasks: <strong>Put Lion</strong> (pick-and-place), <strong>Push-T</strong> (complex pushing), and <strong>Scoop Tortilla</strong> (contact-rich manipulation). With fewer than ten expert demonstrations, MV-VDP reaches a <strong>100% success rate</strong> on the Put Lion task and successfully manages the continuous dynamics of pushing and scooping where prior key-pose-based methods like BridgeVLA often fail.
+            By predicting <strong>continuous action chunks</strong> rather than isolated waypoints, the model maintains the precise temporal coordination required for high-dexterity tasks.
+          </p>
+
+          <div class="box" style="margin-top: 1rem; margin-bottom: 1rem;">
+            <div class="content has-text-centered table-showcase">
+              <div class="table-scroll">
+                <table class="paper-table">
+                  <thead>
+                    <tr>
+                      <th rowspan="2">Method</th>
+                      <th colspan="3" class="table-group">Basic Tasks</th>
+                      <th colspan="4" class="table-group">Unseen Tasks</th>
+                      <th rowspan="2" class="avg-col">Avg.<br>Succ. (%) ↑</th>
+                    </tr>
+                    <tr>
+                      <th>Put Lion</th>
+                      <th>Push-T</th>
+                      <th>Scoop Tort.</th>
+                      <th>Put-B</th>
+                      <th>Put-H</th>
+                      <th>Push-L</th>
+                      <th>Scoop-C</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>DP3<span class="table-citation">(Ze et al., 2024)</span></td>
+                      <td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td class="avg-col">0.00</td>
+                    </tr>
+                    <tr>
+                      <td>π<sub>0.5</sub><span class="table-citation">(Black et al., 2025a)</span></td>
+                      <td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td class="avg-col">1.40</td>
+                    </tr>
+                    <tr>
+                      <td>UVA<span class="table-citation">(Li et al., 2025d)</span></td>
+                      <td>2/10</td><td>0/10</td><td>0/10</td><td>1/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td class="avg-col">5.70</td>
+                    </tr>
+                    <tr>
+                      <td>BridgeVLA<span class="table-citation">(Li et al., 2025b)</span></td>
+                      <td>9/10</td><td>0/10</td><td>4/10</td><td class="best">8/10</td><td class="best">7/10</td><td>0/10</td><td>1/10</td><td class="avg-col">41.42</td>
+                    </tr>
+                    <tr class="ours-row">
+                      <td>MV-VDP (Ours)</td>
+                      <td class="best">10/10</td><td class="best">4/10</td><td class="best">7/10</td><td>5/10</td><td>6/10</td><td class="best">3/10</td><td class="best">5/10</td><td class="avg-col best">57.10</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Table 2: Real-world manipulation results under limited demonstrations. We report success rates over 10 trials per task on three basic tasks and four unseen tasks. All methods are trained with 10 expert trajectories.</p>
+            </div>
+          </div>
+
+          <!-- Real-World Videos -->
+
+          <!-- Scoop the tortilla into the plastic plate -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem; font-style: italic;">Scoop the tortilla into the plastic plate</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/cook/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/cook/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/cook/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Push the T Block into the target region -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem; font-style: italic;">Push the T Block into the target region</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/Push-T/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video class="keep-left" autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/Push-T/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/Push-T/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 3</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Put the lion on the shelf -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem; font-style: italic;">Put the lion on the shelf</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/Put-Lion/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 1</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/Put-Lion/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 2</p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                  <source src="static/videos/Real-World/Seen-Tasks/Put-Lion/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 3</p>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- Generalization to Unseen Scenarios Section -->
+          <h2 class="title is-3 has-text-centered">Generalization to Unseen Scenarios</h2>
+          <p class="has-text-justified">
+            To test robustness, the model is deployed in <strong>four "unseen" settings</strong>: novel backgrounds (Put-B), increased object height (Put-H), dark lighting (Push-L), and an entirely new object category (Scoop-C, using plastic noodles). MV-VDP demonstrates <strong>strong generalization</strong>, particularly in lighting and category variations, achieving an <strong>average success rate of 57.1%</strong> across all real-world tasks compared to just <strong>41.4%</strong> for the strongest Vision-Language-Action baseline.
+            This suggests that the 3D-aware multi-view projections provide a more resilient representation of the environment than standard 2D or MLP-based 3D encoders.
+          </p>
+
+          <!-- Unseen Tasks Videos -->
+
+          <!-- Put-B -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem; font-style: italic;">Background Variation</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-half">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                    <source src="static/videos/Real-World/Unseen-Tasks/Put-B/trail_1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 1</p>
+              </div>
+            </div>
+            <div class="column is-one-half">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                    <source src="static/videos/Real-World/Unseen-Tasks/Put-B/trail_2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 2</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Put-C -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem; font-style: italic;">Category Variation</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-half">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                    <source src="static/videos/Real-World/Unseen-Tasks/Put-C/trail_1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 1</p>
+              </div>
+            </div>
+            <div class="column is-one-half">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                    <source src="static/videos/Real-World/Unseen-Tasks/Put-C/trail_2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 2</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Put-H -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem; font-style: italic;">Height Variation</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-half">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                    <source src="static/videos/Real-World/Unseen-Tasks/Put-H/trail_1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 1</p>
+              </div>
+            </div>
+            <div class="column is-one-half">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                    <source src="static/videos/Real-World/Unseen-Tasks/Put-H/trail_2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 2</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cook-L -->
+          <h3 class="title is-4 has-text-centered" style="margin-top: 2rem; font-style: italic;">Lighting Variation</h3>
+          <div class="columns is-multiline">
+            <div class="column is-one-half">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                    <source src="static/videos/Real-World/Unseen-Tasks/Cook-L/trail_1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 1</p>
+              </div>
+            </div>
+            <div class="column is-one-half">
+              <div class="box">
+                <div class="video-uniform">
+                  <video autoplay muted loop playsinline controls>
+                    <source src="static/videos/Real-World/Unseen-Tasks/Cook-L/trail_2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p class="has-text-centered">Trial 2</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Generation Showcase -->
+          <h2 class="title is-3 has-text-centered">Video Generation Showcase</h2>
+
+          <!-- Sub: Meta-World -->
+          <h3 class="title is-4 has-text-centered" style="margin-top:1.5rem;">Meta-World</h3>
+
+          <p class="has-text-centered is-size-6" style="font-style:italic; margin-bottom:0.5rem;">button-press</p>
+          <div class="video-carousel" id="vc-btn-press">
+            <div class="box" style="padding: 0.75rem;">
+              <div class="carousel-slide active">
+                <video muted loop playsinline controls autoplay>
+                  <source src="static/videos/Video_Generation/Meta-World/button-press/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 1</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Meta-World/button-press/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 2</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Meta-World/button-press/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 3</p>
+              </div>
+            </div>
+            <button class="carousel-btn carousel-prev">&#10094;</button>
+            <button class="carousel-btn carousel-next">&#10095;</button>
+            <div class="carousel-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+
+          <p class="has-text-centered is-size-6" style="font-style:italic; margin-top:1.5rem; margin-bottom:0.5rem;">door-open</p>
+          <div class="video-carousel" id="vc-door-open">
+            <div class="box" style="padding: 0.75rem;">
+              <div class="carousel-slide active">
+                <video muted loop playsinline controls autoplay>
+                  <source src="static/videos/Video_Generation/Meta-World/door-open/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 1</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Meta-World/door-open/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 2</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Meta-World/door-open/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 3</p>
+              </div>
+            </div>
+            <button class="carousel-btn carousel-prev">&#10094;</button>
+            <button class="carousel-btn carousel-next">&#10095;</button>
+            <div class="carousel-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+
+          <p class="has-text-centered is-size-6" style="font-style:italic; margin-top:1.5rem; margin-bottom:0.5rem;">faucet-close</p>
+          <div class="video-carousel" id="vc-faucet-close">
+            <div class="box" style="padding: 0.75rem;">
+              <div class="carousel-slide active">
+                <video muted loop playsinline controls autoplay>
+                  <source src="static/videos/Video_Generation/Meta-World/faucet-close/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 1</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Meta-World/faucet-close/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 2</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Meta-World/faucet-close/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Episode 3</p>
+              </div>
+            </div>
+            <button class="carousel-btn carousel-prev">&#10094;</button>
+            <button class="carousel-btn carousel-next">&#10095;</button>
+            <div class="carousel-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+
+          <!-- Sub: Real-World -->
+          <h3 class="title is-4 has-text-centered" style="margin-top:2.5rem;">Real-World</h3>
+
+          <p class="has-text-centered is-size-6" style="font-style:italic; margin-bottom:0.5rem;">Scoop the tortilla into the plastic plate</p>
+          <div class="video-carousel" id="vc-cook">
+            <div class="box" style="padding: 0.75rem;">
+              <div class="carousel-slide active">
+                <video muted loop playsinline controls autoplay>
+                  <source src="static/videos/Video_Generation/Real-World/cook_7/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 1</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Real-World/cook_7/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 2</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Real-World/cook_7/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 3</p>
+              </div>
+            </div>
+            <button class="carousel-btn carousel-prev">&#10094;</button>
+            <button class="carousel-btn carousel-next">&#10095;</button>
+            <div class="carousel-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+
+          <p class="has-text-centered is-size-6" style="font-style:italic; margin-top:1.5rem; margin-bottom:0.5rem;">Push the T Block into the target region</p>
+          <div class="video-carousel" id="vc-push-t">
+            <div class="box" style="padding: 0.75rem;">
+              <div class="carousel-slide active">
+                <video muted loop playsinline controls autoplay>
+                  <source src="static/videos/Video_Generation/Real-World/push_T_40/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 1</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Real-World/push_T_40/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 2</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Real-World/push_T_40/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 3</p>
+              </div>
+            </div>
+            <button class="carousel-btn carousel-prev">&#10094;</button>
+            <button class="carousel-btn carousel-next">&#10095;</button>
+            <div class="carousel-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+
+          <p class="has-text-centered is-size-6" style="font-style:italic; margin-top:1.5rem; margin-bottom:0.5rem;">Put the lion on the shelf</p>
+          <div class="video-carousel" id="vc-put-lion">
+            <div class="box" style="padding: 0.75rem;">
+              <div class="carousel-slide active">
+                <video muted loop playsinline controls autoplay>
+                  <source src="static/videos/Video_Generation/Real-World/test_put_lion/trail_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 1</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Real-World/test_put_lion/trail_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 2</p>
+              </div>
+              <div class="carousel-slide">
+                <video muted loop playsinline controls>
+                  <source src="static/videos/Video_Generation/Real-World/test_put_lion/trail_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p class="has-text-centered" style="margin-top:6px;">Trial 3</p>
+              </div>
+            </div>
+            <button class="carousel-btn carousel-prev">&#10094;</button>
+            <button class="carousel-btn carousel-next">&#10095;</button>
+            <div class="carousel-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 mathvista_other">Robustness Analysis</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            For the inference denoising steps N, we vary it from 1 to 50. The results are presented in Fig. 3. Surprisingly, in contrast to typical video diffusion processes, which require around 50 denoising steps, MV-VDP achieves a comparable success rate with just a single denoising step. We believe the main reason for this is that heatmaps have relatively simple distribution modes and lack the high-frequency details present in regular images. Furthermore, our action prediction relies solely on the peak locations of the heatmaps, meaning that the overall quality of the heatmaps is less critical, and thus fewer denoising steps are required.
+          </p>
+
+          <div class="box" style="margin-top: 1rem; margin-bottom: 2rem;">
+            <div class="content has-text-centered">
+              <img src="static/images/Diffusion_steps.png" alt="Diffusion steps analysis" width="100%" style="max-width: 1200px; height: auto;"/>
+              <p>Figure 3: Average success rates for different inference denoising steps. MV-VDP demonstrates high robustness to varying diffusion steps, achieving strong performance even when the denoising step is set to 1.</p>
+            </div>
+          </div>
+
+          <p>
+            For better visualization, we present example prediction results with different inference denoising steps in Fig. 4. As shown, when the denoising step is set to 1, the visual quality of the RGB prediction is somewhat lower, but the predicted heatmaps still provide meaningful information.
+          </p>
+
+          <div class="video-carousel" id="vc-robustness-images" style="margin-top: 1rem;">
+            <div class="box" style="padding: 0.75rem;">
+              <div class="carousel-slide active">
+                <img src="static/images/Video predictions1.png" alt="Visualization of video predictions 1">
+              </div>
+              <div class="carousel-slide">
+                <img src="static/images/Video predictions2.png" alt="Visualization of video predictions 2">
+              </div>
+              <div class="carousel-slide">
+                <img src="static/images/Video predictions3.png" alt="Visualization of video predictions 3">
+              </div>
+              <div class="carousel-slide">
+                <img src="static/images/Video predictions4.png" alt="Visualization of video predictions 4">
+              </div>
+              <div class="carousel-slide">
+                <img src="static/images/Video predictions5.png" alt="Visualization of video predictions 5">
+              </div>
+              <div class="carousel-slide">
+                <img src="static/images/Video predictions6.png" alt="Visualization of video predictions 6">
+              </div>
+            </div>
+            <button class="carousel-btn carousel-prev">&#10094;</button>
+            <button class="carousel-btn carousel-next">&#10095;</button>
+            <div class="carousel-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <p class="has-text-centered" style="margin-top: 0.75rem;">Figure 4: Visualization of video predictions under different denoising steps. Predicted RGB videos and heatmap videos under different denoising step settings. Lower denoising steps lead to visibly lower RGB video quality, while the predicted heatmaps remain relatively stable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 mathvista_other">Ablation Studies</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            We conduct ablation studies on the Meta-World benchmark to evaluate the key design choices in MV-VDP, as summarized in Tab. 3. Model #2 replaces LoRA with full fine-tuning and achieves comparable performance (87.4%), but with significantly higher computational and memory costs. Therefore, we adopt LoRA fine-tuning in all experiments unless otherwise specified.
+          </p>
+
+          <p>
+            Model #3 concatenates heatmap and image sequences along the channel dimension rather than the view dimension, requiring additional convolutional adaptation for DiT. This introduces an information bottleneck and degrades performance (86.9% → 81.1%), indicating that view-wise concatenation better preserves multi-view information.
+          </p>
+
+          <p>
+            Model #4 predicts only heatmap sequences without joint video prediction, resulting in a substantial performance drop (89.1% → 61.1%), highlighting the importance of modeling temporal dynamics through video prediction. Finally, Model #5 removes pretrained video foundation weights and fails to fit the training data, demonstrating the critical role of large-scale video pretraining for data-efficient manipulation.
+          </p>
+
+          <div class="box" style="margin-top: 1rem; margin-bottom: 2rem;">
+            <div class="content has-text-centered table-showcase">
+              <div class="table-scroll">
+                <table class="paper-table compact">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Video Pred</th>
+                      <th>View Concat</th>
+                      <th>Initial Weights</th>
+                      <th>LoRA</th>
+                      <th class="avg-col">Avg (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="ours-row">
+                      <td>1</td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td class="avg-col best">89.1</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-no">-</span></td>
+                      <td class="avg-col">87.4</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-no">-</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td class="avg-col">81.1</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td><span class="bool-no">-</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td class="avg-col">61.1</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td><span class="bool-no">-</span></td>
+                      <td><span class="bool-yes">✓</span></td>
+                      <td class="avg-col">4.6</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Table 3: Ablation study of MV-VDP design choices on Meta-World. Columns indicate whether the model applies LoRA fine-tuning (LoRA), concatenates heatmap and image sequences along the view dimension (View Concat), predicts future video frames (Video Pred) and uses pretrained initialization (Initial Weights). The last column reports the average success rate (%) across seven tasks.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 mathvista_other">Safer Deployment and Enhanced Explainability</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            Deploying manipulation policies in the real world poses safety challenges: it's difficult to assess whether a predicted action sequence is reasonable or safe from its raw numerical representation. In practice, reliable verification often requires actual action execution, which can be unsafe and may damage the robot or surroundings.
+          </p>
+          <p>
+            In contrast, MV-VDP generates realistic, temporally consistent multi-view video and heatmap sequences, allowing users to visually inspect predicted rollouts before execution. This provides a safer, more interpretable action validation mechanism.
+          </p>
+          <p>
+            To quantify this benefit, we conducted a study with four evaluators, each performing 35 rollouts (140 in total). The evaluators reviewed the generated videos before execution and reran any rollout that appeared unsafe (e.g., potential collisions). Tab. 4 shows that video-based inspection significantly reduces collision events, demonstrating that MV-VDP's predicted RGB videos enhance the interpretability of action outputs and provide a practical tool for safer deployment.
+          </p>
+
+          <div class="box" style="margin-top: 1rem; margin-bottom: 2rem;">
+            <div class="content has-text-centered table-showcase">
+              <div class="table-scroll">
+                <table class="paper-table compact" style="min-width: 560px;">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>With video checking</th>
+                      <th>Without video checking</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="row-label">Collisions</td>
+                      <td class="best">0 / 140</td>
+                      <td>6 / 140</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Table 4: Number of collision events with and without video-based action checking.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 mathvista_other" id="citation">Citation</h1>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content">
+          <pre><code>
+@misc{li2025bridgevla,
+    title={BridgeVLA: Input-Output Alignment for Efficient 3D Manipulation Learning with Vision-Language Models},
+    author={Peiyan Li and Yixiang Chen and Hongtao Wu and Xiao Ma and Xiangnan Wu and Yan Huang and Liang Wang and Tao Kong and Tieniu Tan},
+    year={2025},
+    eprint={2506.07961},
+    archivePrefix={arXiv},
+    primaryClass={cs.RO}
+}
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container" style="width: 60%;">
+  <style>
+      pre {
+        background: linear-gradient(180deg, rgba(248, 249, 255, 0.98), rgba(238, 241, 252, 0.94));
+        padding: 5px; /* Adjust padding to 5px */
+        border: 1px solid rgba(99, 112, 190, 0.16);
+        border-radius: 5px;
+        overflow-x: auto; /* Allow horizontal scrolling */
+    }
+    code {
+        font-family: Consolas, "Courier New", monospace;
+        color: #6f4fb2; /* Code text color */
+    }
+  </style>
+
+
+  </div>
+</section>
+
+
+<footer class="footer">
+  <!-- <div class="container"> -->
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p style="text-align: center;">
+          We would like to sincerely thank <a href="https://github.com/snym04">Minghui Zhang</a> for helping design this project website.<br>
+          This website is primarily adapted from <a href="https://bridgevla.github.io/">BridgeVLA</a>.          </p>
+          </p>
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+</footer>
+
+
+<script>
+const showcaseCarouselIds = ['vc-btn-press', 'vc-door-open', 'vc-faucet-close', 'vc-cook', 'vc-push-t', 'vc-put-lion'];
+
+function createShowcaseViewLabels() {
+  const row = document.createElement('div');
+  row.className = 'showcase-view-labels';
+  row.setAttribute('aria-hidden', 'true');
+  row.innerHTML = `
+    <span class="view-chip view-1">View 1</span>
+    <span class="view-chip view-2">View 2</span>
+    <span class="view-chip view-3">View 3</span>
+    <span class="view-chip view-1">View 1</span>
+    <span class="view-chip view-2">View 2</span>
+    <span class="view-chip view-3">View 3</span>
+    <span class="ghost-slot"></span>
+    <span class="ghost-slot"></span>
+  `;
+  return row;
+}
+
+showcaseCarouselIds.forEach(function(id) {
+  const carousel = document.getElementById(id);
+  if (!carousel) return;
+  carousel.querySelectorAll('.carousel-slide').forEach(function(slide) {
+    if (slide.querySelector('.showcase-view-labels')) return;
+    const media = slide.querySelector('video, img');
+    if (!media) return;
+    slide.insertBefore(createShowcaseViewLabels(), media);
+  });
+});
+
+document.querySelectorAll('.video-carousel').forEach(function(carousel) {
+  const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
+  const dots   = Array.from(carousel.querySelectorAll('.dot'));
+  let current  = 0;
+
+  function showSlide(n) {
+    const prev = slides[current].querySelector('video');
+    if (prev) {
+      prev.pause();
+    }
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = ((n % slides.length) + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    const vid = slides[current].querySelector('video');
+    if (vid) {
+      vid.currentTime = 0;
+      vid.play();
+    }
+  }
+
+  carousel.querySelector('.carousel-prev').addEventListener('click', function(e){
+    e.stopPropagation(); showSlide(current - 1);
+  });
+  carousel.querySelector('.carousel-next').addEventListener('click', function(e){
+    e.stopPropagation(); showSlide(current + 1);
+  });
+  dots.forEach(function(dot, i){
+    dot.addEventListener('click', function(){ showSlide(i); });
+  });
+});
+</script>
+
+</body>
+</html>
