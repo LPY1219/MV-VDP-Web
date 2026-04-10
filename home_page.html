@@ -527,8 +527,16 @@
     .top-spotlight .publication-links .button.is-dark span {
       color: #ffffff !important;
     }
-    .top-spotlight .publication-links .button.is-dark .ai-arxiv {
+
+    /* arXiv icon — Cornell red */
+    .top-spotlight .publication-links .ai-arxiv {
+      color: #B31B1B !important;
+    }
+
+    /* GitHub icon — soft white with slight warm tint to stand out */
+    .top-spotlight .publication-links .fa-github {
       color: #ffffff !important;
+      opacity: 1;
     }
     .top-spotlight .publication-links .hf-icon {
       display: inline-block;
@@ -886,12 +894,13 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://drive.google.com/file/d/1PEtfLcsANUBoN90alN-vucwEWsuabIe4/view?usp=sharing"
+                <!-- <a href="https://drive.google.com/file/d/1PEtfLcsANUBoN90alN-vucwEWsuabIe4/view?usp=sharing" -->
+                <a href="https://arxiv.org/pdf/2604.03181"
                    target="_blank"
                    rel="noopener noreferrer"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
-                      <i class="ai ai-arxiv" style="color: #B31B1B;"></i>
+                      <i class="ai ai-arxiv"></i>
                   </span>
                   <span>arXiv</span>
                 </a>
@@ -2058,14 +2067,11 @@
       <div class="column is-four-fifths">
         <div class="content">
           <pre><code>
-@misc{li2026multiviewvideodiffusionpolicy,
-      title={Multi-View Video Diffusion Policy: A 3D Spatio-Temporal-Aware Video Action Model}, 
-      author={Peiyan Li and Yixiang Chen and Yuan Xu and Jiabing Yang and Xiangnan Wu and Jun Guo and Nan Sun and Long Qian and Xinghang Li and Xin Xiao and Jing Liu and Nianfeng Liu and Tao Kong and Yan Huang and Liang Wang and Tieniu Tan},
-      year={2026},
-      eprint={2604.03181},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO},
-      url={https://arxiv.org/abs/2604.03181}, 
+@article{li2026multi,
+  title={Multi-View Video Diffusion Policy: A 3D Spatio-Temporal-Aware Video Action Model},
+  author={Li, Peiyan and Chen, Yixiang and Xu, Yuan and Yang, Jiabing and Wu, Xiangnan and Guo, Jun and Sun, Nan and Qian, Long and Li, Xinghang and Xiao, Xin and others},
+  journal={arXiv preprint arXiv:2604.03181},
+  year={2026}
 }
 </code></pre>
         </div>
